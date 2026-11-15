@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.Media.Imaging;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
 using System.Collections.Generic;
 
 namespace GitItGUI.UI.Screens
@@ -27,8 +28,8 @@ namespace GitItGUI.UI.Screens
 			singleton = this;
 			InitializeComponent();
 
-			outOfDateImage = new Bitmap("Images/Update.png");
-			outOfDateImageFlash = new Bitmap("Images/UpdateFlash.png");
+			outOfDateImage = new Bitmap(AssetLoader.Open(new Uri("avares://GitItGUI.UI/Images/Update.png")));
+			outOfDateImageFlash = new Bitmap(AssetLoader.Open(new Uri("avares://GitItGUI.UI/Images/UpdateFlash.png")));
 
 			updateImage.IsVisible = false;
 			updateImage.PointerReleased += UpdateImage_MouseUp;

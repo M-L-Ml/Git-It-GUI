@@ -9,6 +9,9 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Images\Alert.png" />
+    <None Remove="Images\AppIcon.png" />
+    <None Remove="Images\AppIcon.ico" />
+    <None Remove="Images\AppIcon.svg" />
     <None Remove="Images\CheckPattern.png" />
     <None Remove="Images\Clone.png" />
     <None Remove="Images\conflicted.png" />
@@ -29,6 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Images\Alert.png" />
+    <AvaloniaResource Include="Images\AppIcon.png" />
+    <AvaloniaResource Include="Images\AppIcon.ico" />
+    <AvaloniaResource Include="Images\AppIcon.svg" />
     <AvaloniaResource Include="Images\CheckPattern.png" />
     <AvaloniaResource Include="Images\Clone.png" />
     <AvaloniaResource Include="Images\conflicted.png" />
