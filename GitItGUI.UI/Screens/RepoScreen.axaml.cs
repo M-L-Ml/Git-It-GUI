@@ -366,6 +366,8 @@ namespace GitItGUI.UI.Screens
 
 		private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (tabControl == null)
+				return; // guard against pre-init event firing
 			var selected = (TabItem)tabControl.SelectedItem;
 			if (selected == terminalTabItem) terminalTab.ScrollToEnd();
 			else if (lastTabItem == terminalTabItem) terminalTab.CheckRefreshPending();
