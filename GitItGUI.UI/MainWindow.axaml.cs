@@ -22,6 +22,12 @@ namespace GitItGUI.UI
 	{
 		public static MainWindow singleton;
 
+		public MainWindow()
+		{
+			singleton = this;
+			InitializeComponent();
+		}
+
 		//public MainWindow()
 		//{
 		//	// UnhandledException
