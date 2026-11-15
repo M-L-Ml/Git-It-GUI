@@ -31,8 +31,9 @@ namespace GitItGUI.UI.Screens
 			outOfDateImageFlash = new Bitmap("Images/UpdateFlash.png");
 
 			updateImage.IsVisible = false;
-			//updateImage.MouseUp += UpdateImage_MouseUp;
-			//timer = new DispatcherTimer(TimeSpan.FromSeconds(.25), DispatcherPriority.Background, DispatcherCallback, Dispatcher);
+			updateImage.PointerReleased += UpdateImage_MouseUp;
+			timer = new DispatcherTimer(TimeSpan.FromSeconds(.25), DispatcherPriority.Background, DispatcherCallback);
+			timer.Start();
 		}
 
 		private void DispatcherCallback(object sender, EventArgs e)
@@ -62,26 +63,26 @@ namespace GitItGUI.UI.Screens
 			{
 				var item = new ListBoxItem();
 				item.Content = Path.GetFileName(repo);
-				//item.ToolTip = repo;
+				item.Tag = repo;
 				item.FontSize = 24;
 
-				//item.HorizontalContentAlignment = HorizontalAlignment.Center;
 				item.DoubleTapped += Item_MouseDoubleClick;
-				item.ContextMenu = new ContextMenu();
 
 				// open folder path
 				var menuItem = new MenuItem();
 				menuItem.Header = "Open folder path";
-				//menuItem.ToolTip = repo;
+				menuItem.Tag = repo;
 				menuItem.Click += OpenRepoMenuItem_Click;
-				historyListBox.Items.Add(menuItem);
 
 				// remove repo from history
-				menuItem = new MenuItem();
-				menuItem.Header = "Remove from history";
-				//menuItem.ToolTip = repo;
-				menuItem.Click += RemoveHistoryMenuItem_Click;
-				historyListBox.Items.Add(menuItem);
+				var menuItem2 = new MenuItem();
+				menuItem2.Header = "Remove from history";
+				menuItem2.Tag = repo;
+				menuItem2.Click += RemoveHistoryMenuItem_Click;
+
+				item.ContextMenu = new ContextMenu();
+				item.ContextMenu.Items.Add(menuItem);
+				item.ContextMenu.Items.Add(menuItem2);
 
 				historyListBox.Items.Add(item);
 			}
@@ -104,28 +105,28 @@ namespace GitItGUI.UI.Screens
 
 		private void OpenRepoMenuItem_Click(object sender, RoutedEventArgs e)
 		{
-			//var item = (MenuItem)sender;
-			//string repo = (string)item.ToolTip;
-			//if (!Tools.OpenFolderLocation(repo))
-			//{
-			//	AppManager.RemoveRepoFromHistory(repo);
-			//	RefreshHistory();
-			//}
+			var item = (MenuItem)sender;
+			string repo = (string)item.Tag;
+			if (!Tools.OpenFolderLocation(repo))
+			{
+				AppManager.RemoveRepoFromHistory(repo);
+				RefreshHistory();
+			}
 		}
 
 		private void RemoveHistoryMenuItem_Click(object sender, RoutedEventArgs e)
 		{
-			//var item = (MenuItem)sender;
-			//string repo = (string)item.ToolTip;
-			//AppManager.RemoveRepoFromHistory(repo);
-			//RefreshHistory();
+			var item = (MenuItem)sender;
+			string repo = (string)item.Tag;
+			AppManager.RemoveRepoFromHistory(repo);
+			RefreshHistory();
 		}
 
 		private void Item_MouseDoubleClick(object sender, Avalonia.Input.TappedEventArgs e)
 		{
-			//var item = (ListBoxItem)sender;
-			//string repo = (string)item.ToolTip;
-			//RepoScreen.singleton.OpenRepo(repo);
+			var item = (ListBoxItem)sender;
+			string repo = (string)item.Tag;
+			RepoScreen.singleton.OpenRepo(repo);
 		}
 
 		private void openButton_Click(object sender, RoutedEventArgs e)
@@ -139,22 +140,22 @@ namespace GitItGUI.UI.Screens
 		private void cloneButton_Click(object sender, RoutedEventArgs e)
 		{
 			CloneScreen.singleton.Setup();
-			//MainWindow.singleton.Navigate(CloneScreen.singleton);
+			MainWindow.singleton.Navigate(CloneScreen.singleton);
 		}
 
 		private void createButton_Click(object sender, RoutedEventArgs e)
 		{
 			CreateScreen.singleton.Setup();
-			//MainWindow.singleton.Navigate(CreateScreen.singleton);
+			MainWindow.singleton.Navigate(CreateScreen.singleton);
 		}
 
 		private void settingsButton_Click(object sender, RoutedEventArgs e)
 		{
 			SettingsScreen.singleton.Setup();
-			//MainWindow.singleton.Navigate(SettingsScreen.singleton);
+			MainWindow.singleton.Navigate(SettingsScreen.singleton);
 		}
 
-		private void UpdateImage_MouseUp(object sender, Avalonia.Input.TappedEventArgs e)
+		private void UpdateImage_MouseUp(object sender, Avalonia.Input.PointerReleasedEventArgs e)
 		{
 			using var process = Process.Start("https://github.com/reignstudios/Git-It-GUI/releases");
 		}

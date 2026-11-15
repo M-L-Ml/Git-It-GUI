@@ -1,4 +1,6 @@
 ﻿using Avalonia.Controls;
+using GitItGUI.Core;
+using GitItGUI.UI.Overlays;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +28,19 @@ namespace GitItGUI.UI
 
 		public static void Show(Window window, string message)
 		{
-			// TODO
+			Show(window, message, "Message", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 
 		public static void Show(Window window, string message, string title, MessageBoxButton button, MessageBoxImage image)
 		{
-			// TODO
+			if (MainWindow.singleton != null)
+			{
+				MainWindow.singleton.ShowMessageOverlay(title, message);
+			}
+			else
+			{
+				DebugLog.LogError(title + ": " + message);
+			}
 		}
 	}
 }

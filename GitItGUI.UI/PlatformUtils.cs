@@ -1,39 +1,30 @@
-﻿//using System.Windows.Forms;
-//using System.Windows.Interop;
-//using WPFFolderBrowser;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 
 namespace GitItGUI.UI.Utils
 {
 	static class PlatformUtils
-    {
+	{
 		public static bool SelectFolder(out string folderPath)
 		{
-			// ==============================
-			// NOTE: keep this for legacy ref
-			// ==============================
-			/*var dlg = new FolderBrowserDialog();
-			var nativeWindow = new NativeWindow();
-			nativeWindow.AssignHandle(new WindowInteropHelper(MainWindow.singleton).Handle);
-			if (dlg.ShowDialog(nativeWindow) == DialogResult.OK)
+			folderPath = SelectFolderAsync().GetAwaiter().GetResult();
+			return !string.IsNullOrEmpty(folderPath);
+		}
+
+		public static async Task<string> SelectFolderAsync()
+		{
+			var topLevel = Avalonia.Controls.TopLevel.GetTopLevel(MainWindow.singleton);
+			if (topLevel == null) return null;
+
+			var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
 			{
-				folderPath = dlg.SelectedPath;
-				return true;
-			}
+				Title = "Select Folder",
+				AllowMultiple = false
+			});
 
-			folderPath = null;
-			return false;*/
-
-			/*using (var dlg = new WPFFolderBrowserDialog("Select Folder Test"))
-			{
-				if (dlg.ShowDialog(MainWindow.singleton) == true)
-				{
-					folderPath = dlg.FileName;
-					return true;
-				}
-			}*/
-
-			folderPath = null;
-			return false;
+			var folder = folders?.FirstOrDefault();
+			return folder?.TryGetLocalPath();
 		}
 	}
 }
